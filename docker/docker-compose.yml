@@ -1,0 +1,24 @@
+version: "3"
+services:
+   veille:
+    build:
+      context: ../
+      dockerfile: ./docker/Dockerfile
+      args:
+        - username=devel
+        - userid=1000
+    container_name: veille
+    image: veille
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
+    ports:
+      - "8850:8850"
+      - "6050:6050"
+    volumes:
+      - ../:/home/devel/handson-ml
+    command: /opt/conda/bin/jupyter notebook --ip='0.0.0.0' --port=8850 --no-browser --allow-root
+    env_file:
+      - auth.env
